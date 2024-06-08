@@ -3,7 +3,8 @@ from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app)
+allowed_origins = ["http://localhost:3000", "https://localhost:3000"]  
+CORS(app, origins=allowed_origins)  
 
 @app.route('/')
 def hello():

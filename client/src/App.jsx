@@ -10,17 +10,18 @@ function App() {
     const form = e.target;
     const formData = new FormData(form);
 
-    fetch('http://localhost:5000/api/threads', { method: "post", body: formData })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      setResponseData(data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+    try {
+      fetch('http://localhost:5000/api/threads', { method: "post", body: formData })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setResponseData(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
   }
-
   return (
     <form method="post" onSubmit={handleSubmit}>
         <label>Ask Your AI:<br />
