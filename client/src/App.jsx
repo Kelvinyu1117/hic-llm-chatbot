@@ -11,15 +11,12 @@ function App() {
     const formData = new FormData(form);
 
     try {
-      fetch('http://localhost:5000/api/threads', { method: "post", body: formData })
-      .then(response => response.json())
-      .then(data => {
+        const response = await fetch('http://localhost:5000/api/threads', { method: "post", body: formData });
+        const data = await response.json()
         console.log(data);
         setResponseData(data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    } catch (error) {
+        console.log('There was an error', error);
     }
   }
   return (
