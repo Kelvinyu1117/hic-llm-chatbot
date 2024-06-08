@@ -1,0 +1,64 @@
+switch branch: git checkout fix/kelvin-setup
+
+conda env:
+
+(base) C:\Users\User>conda info --envs
+# conda environments:
+#
+base                  *  C:\Users\User\miniconda3
+
+(base) C:\Users\User>conda create -n condaEnv1
+Retrieving notices: ...working... done
+Channels:
+ - defaults
+Platform: win-64
+Collecting package metadata (repodata.json): done
+Solving environment: done
+
+#
+# To activate this environment, use
+#
+#     $ conda activate condaEnv1
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+
+(base) C:\Users\User>conda info --envs
+# conda environments:
+#
+base                  *  C:\Users\User\miniconda3
+condaEnv1                C:\Users\User\miniconda3\envs\condaEnv1
+
+
+install nodejs:
+# installs fnm (Fast Node Manager)
+winget install Schniz.fnm
+# download and install Node.js
+fnm use --install-if-missing 20
+# verifies the right Node.js version is in the environment
+node -v # should print `v20.14.0`
+# verifies the right NPM version is in the environment
+npm -v # should print `10.7.0`
+
+vite:
+npm install vite
+npm update
+npm run dev
+(condaEnv2) C:\Users\User\Projects\hic-llm-chatbot\client>npm run dev
+ press r + enter to restart the server
+  press u + enter to show server url
+  press o + enter to open in browser
+  press c + enter to clear console
+  press q + enter to quit
+
+
+flask:
+flask --app hello run
+or:
+flask --app hello run --debug
+or:
+flask run --port 5001
+
+
