@@ -9,7 +9,7 @@ CORS(app)
 @app.route('/GET', methods=['GET'])
 def hello():
     if request.method == 'GET':
-        return jsonify(message="Hello, JSON from server!")
+        return jsonify(message="Hello from server!")
 
 @app.route('/POST', methods=['POST'])
 def get_path():
