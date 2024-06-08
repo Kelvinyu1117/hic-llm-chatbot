@@ -9,30 +9,30 @@ function App() {
 
   async function getUser() {
     try {
-      const response = await axios.get("http://127.0.0.1:5001/GET");
+      const response = await axios.get("http://127.0.0.1:5001/");
       console.log(JSON.stringify(response));
-      document.getElementById("post").innerHTML = JSON.stringify(
-        response.data["message"]
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function Userpost(user_input) {
+    try {
+      const response = await axios.post("http://127.0.0.1:5001/user_question", {
+        question: user_input,
+      });
+      console.log(JSON.stringify(response));
+      document.getElementById("output").innerHTML = JSON.stringify(
+        response.data
       );
     } catch (error) {
       console.error(error);
     }
   }
 
-  function myFunction() {
+  function chatBox() {
     let question = prompt("Please enter your question");
-
-    axios
-      .post("http://127.0.0.1:5001/POST", {
-        question: question,
-      })
-      .then(function (response) {
-        console.log(JSON.stringify(response));
-      })
-      .catch(function (error) {
-        console.log(JSON.stringify(error));
-      });
-
+    Userpost(question);
     getUser();
   }
 
@@ -40,8 +40,8 @@ function App() {
     <>
       <div className="card">
         {/*<button onClick={getUser}>Try GET</button>*/}
-        <button onClick={myFunction}>Click Me</button>
-        <p id="post"></p>
+        <button onClick={chatBox}>Click Me</button>
+        <p id="output"></p>
       </div>
     </>
   );
