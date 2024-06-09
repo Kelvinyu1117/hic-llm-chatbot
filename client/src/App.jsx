@@ -5,8 +5,6 @@ import "./App.css";
 import axios from "axios";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   async function getUser() {
     try {
       const response = await axios.get("http://127.0.0.1:5001/");
@@ -30,10 +28,11 @@ function App() {
     }
   }
 
-  function chatBox() {
+  async function chatBox() {
+    // turn into aync function
     let question = prompt("Please enter your question");
-    Userpost(question);
-    getUser();
+    await Userpost(question); // should await all the async operations
+    await getUser();
   }
 
   return (
