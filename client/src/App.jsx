@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import makeServer from "./server.jsx";
 
 function App() {
   const [responseData, setResponseData] = useState(null);
@@ -11,7 +12,7 @@ function App() {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch("http://localhost:5000/api/threads", {
+      const response = await fetch("/api/threads", {
         method: "post",
         body: formData,
       });
