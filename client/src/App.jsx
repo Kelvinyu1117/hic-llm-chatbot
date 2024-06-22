@@ -12,16 +12,11 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [responseData, setResponseData] = useState(null);
 
-
+  // Get threads for first AI msg
   useEffect(() => {
     handleLoad()
   }, []);
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  // Get threads for first AI msg
   async function handleLoad() {
     try {
         const response = await fetch('/api/threads', { method: "get" });
@@ -33,11 +28,15 @@ function App() {
   }
 
   // Send & Get response for msg from users
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
-        const response = await fetch('/api/threads', { method: "post", body: inputValue });
+        const response = await fetch('/api/threads', { method: "post", body: inputValue }); //inputValue from handleInputChange()
         const data = await response.json()
         setResponseData(data);
     } catch (error) {
