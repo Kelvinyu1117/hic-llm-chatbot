@@ -1,0 +1,28 @@
+import json
+import logging 
+import os
+from dotenv import load_dotenv
+import replicate
+from replicate.client import Client
+
+load_dotenv()
+REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
+
+replicate = Client(api_token=REPLICATE_API_TOKEN)
+
+
+output = replicate.run(
+    "01-ai/yi-6b-chat:14efadfaf772f45ee74c14973007cbafab3ccac90169ec96a9fc7a804253535d",
+    input={
+        #"top_k": 50,
+        #"top_p": 0.8,
+        "prompt": "如何预防常见的心血管疾病，如心脏病和中风？",
+        #"temperature": 0.3,
+       # "max_new_tokens": 1024,
+        "prompt_template": "<|im_start|>system\nPlease reply in traditional chinese<|im_end|>\n<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n",
+        #"repetition_penalty": 1.2
+    }
+)
+
+for item in output:
+    print(item, end="")

@@ -6,11 +6,19 @@ import logging
 import os
 from dotenv import load_dotenv
 import requests
+from supabase import create_client, Client
+from datetime import datetime
+import uuid
 
 # load environmental variable
 load_dotenv()
-API_KEY = os.getenv("API_KEY")
-Secret_KEY = os.getenv("Secret_KEY")
+API_KEY: str = os.getenv("API_KEY")
+Secret_KEY: str = os.getenv("Secret_KEY")
+url: str = os.environ.get("SUPABASE_URL")
+key: str = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
+
+
 
 app = Flask(__name__)
 allowed_origins = ["http://localhost:3000", "https://localhost:3000"]  
@@ -35,7 +43,9 @@ def callLLM(prompt):
  
     def do_chat(prompt):
         url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/yi_34b_chat?access_token=" + get_access_token()
+        prompt = prompt+"請將以上內容轉換成繁體字, 然後以繁體回答"
 
+        print(prompt)
         payload = json.dumps({
             "messages": [
                 {
@@ -78,19 +88,32 @@ def handle_threads():
 
     # http://localhost:5000/api/threads
     if request.method == 'GET':
+        #question=json.loads(request.get_json())
         question=request.get_json()
+        app.logger.info("print api call content")
+        print(question["topic_id"])
+        print(question["user"])   # user: bob
+        print(question["name"])   #name: "Health Bot",
+        print(question["question"])
         print(question)
-        print(type(question))
-        anwser=callLLM(question)
-        modified_anwser={
-            "id": anwser['id'],
-            "userPrompt":question,
-            "result":anwser['result'],
-        }
-        return (jsonify(modified_anwser)) 
+        print(type(question)) # <class 'dict'>
+        userdata=supabase.table("ChatHistory").insert({"topic_id":question["topic_id"],"user":question["user"], "name":question["name"],"message_id":str(uuid.uuid4()),"text":question["question"],"sender":"user", "timestamp": str(datetime.now())}).execute()
+        #print (data)
+
+        anwser=callLLM(question["question"])
+        result=anwser['result']
+        print(result)
+        print(type(anwser["result"])) #<class 'str'>
+        aidata=supabase.table("ChatHistory").insert({"topic_id":question["topic_id"],"user":question["user"], "name":question["name"],"message_id":str(uuid.uuid4()),"text":result,"sender":"ai", "timestamp": str(datetime.now())}).execute()
+        
+        chatHistory = supabase.table("ChatHistory").select("*").eq("topic_id", question["topic_id"]).execute()   # select columno, eq row
+        app.logger.info("print caht history") 
+        print (chatHistory)
+        print (type(chatHistory))
+        return (chatHistory.json())
 
 
-if __name__ == '__main__': # if __name__ == '__main__'的意思是：当.py文件被直接运行时，if __name__ == '__main__'之下的代码块将被运行；当.py文件以模块形式被导入时，if __name__ == '__main__'之下的代码块不被运行。
+if __name__ == '__main__': # function to run (except imported)
     app.run(debug=True, port=5002) # flask --app app run --debug --port 5002
 
 

@@ -1,0 +1,23 @@
+import os
+import json
+from dotenv import load_dotenv
+from supabase import create_client, Client
+
+
+
+
+
+def main():
+   
+    load_dotenv()
+    url: str = os.environ.get("SUPABASE_URL")
+    key: str = os.environ.get("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    venderid=11
+    #data = supabase.table("Vendor").insert({"vendor_id":venderid,"vender_name":"Suki", "vender_location":"Haven","total_employee":"100"}).execute()
+    data=supabase.table("ChatHistory").insert({"topic_id":"i","user":"o", "name":"p","message_id":"p","text":"o","sender":"user", "timestamp": "o"}).execute()
+    #response = supabase.table("Vendor").select("*").eq("vendor_id", 10).execute()   # select columno, eq row
+    #print (response.json())
+    
+ 
+main()
